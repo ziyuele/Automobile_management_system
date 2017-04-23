@@ -2,6 +2,7 @@ package com.qc.mainFrame;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -9,9 +10,12 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -34,7 +38,7 @@ public class MainFrame extends JFrame {
 	
 	private LeftERA ltf = new LeftERA(this);
 	private RightERA rig = new RightERA(this);
-	public  static JSplitPane hsplit = new JSplitPane();
+	public  static JSplitPane hsplit = new JSplitPane(); 
 	public LeftERA getleftERa(){
 		return ltf;
 	}
@@ -53,10 +57,7 @@ public class MainFrame extends JFrame {
 		this.setExtendedState(MAXIMIZED_BOTH);
 		
 		this.setJMenuBar(new MeanuBar().getMenuBar());
-		
-		
-		
-		
+				
 		Container con = this.getContentPane();
 		hsplit.setDividerLocation(350);
 		hsplit.setLeftComponent(ltf);
@@ -64,7 +65,10 @@ public class MainFrame extends JFrame {
 		con.add(hsplit);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-	}
+	}	
+	/*
+	 * 封装的需求的方法
+	 */	
 }	
 /*
  * 主界面设置为两个大的模块，其中左边的模块为以下的具体内容：
@@ -85,7 +89,7 @@ class LeftERA extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//System.out.println("test1 success");
-				MainFrame.hsplit.setRightComponent(new RightERA1());
+				MainFrame.hsplit.setRightComponent(new PieChart().getChartPanel());
 			}
 		});
 		
@@ -151,20 +155,20 @@ class RightERA1 extends JPanel{
 		super();	
 		this.lst1 = ConnectToDBa.getStaticStatus();
 		this.lst2 = ConnectToDBa.getDynamicStatus();
-		this.setLayout(new GridLayout(10,10,10,10));
+		this.setLayout(new GridLayout(5,10,5,10));
 		for(int a = 0;a<lst1.size();a++){
-			float balence = lst1.get(a).getBalance();
-			float base_Fee = lst1.get(a).getBase_Fee();
+			int balence = lst1.get(a).getBalance();
+			int base_Fee = lst1.get(a).getBase_Fee();
 			String Car_type = lst1.get(a).getCar_type();
-			float fee = lst1.get(a).getFee();
+			int fee = lst1.get(a).getFee();
 			int id = lst1.get(a).getID();
-			int  logIn_Date = lst1.get(a).getLogIn_date();
+			Date  logIn_Date = lst1.get(a).getLogIn_date();
 			String name = lst1.get(a).getName();
 			
-			JLabel jbCar = new JLabel("name:"+name+"   "+"id:"+id);
+			JLabel jbCar = new JLabel("name:"+name+"\r\n   "+"id:"+id);
 			jbCar.setOpaque(true);
 			jbCar.setBackground(Color.CYAN);
-			jbCar.setFont(new Font("宋体", Font.PLAIN, 13));
+			jbCar.setFont(new Font("幼圆", Font.PLAIN, 15));
 			jbCar.setSize(50, 50);
 			this.add(jbCar);
 		}
@@ -193,6 +197,7 @@ class RightERA1 extends JPanel{
 		}
 	}
 }
+
 class RightERA2 extends JPanel{
 	/**
 	 * 
@@ -208,9 +213,11 @@ class RightERA2 extends JPanel{
 	        super.paintComponent(g);  
 	        //下面这行是为了背景图片可以跟随窗口自行调整大小，可以自己设置成固定大小  
 	        g.drawImage(img, 0, 0,this.getWidth(), this.getHeight(), this);  
-	    }  
-	
+	   }  
 }
+
+
+
 
 
 

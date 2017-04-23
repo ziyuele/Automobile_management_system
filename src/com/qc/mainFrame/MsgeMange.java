@@ -8,6 +8,11 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,9 +20,12 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
+
+import com.qc.dao.model.StaticUSr;
 
 public class MsgeMange extends JDialog{
 
@@ -60,11 +68,212 @@ public class MsgeMange extends JDialog{
 				new ReFlush();
 			}
 		});
+		button2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//System.out.println("please input the id");
+				com.qc.mainFrame.MsgeMange.this.setVisible(false);
+				new UsrUpdate();
+			}
+		});
+		button3.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				MsgeMange.this.setVisible(false);
+				MainFrame.hsplit.setRightComponent(new RightERA1());
+			}
+		});
 	}
+}
+/**
+ * 
+ * @author kangjianhome
+ *  this massage is used to update the user messange from meanu button "信息管理-->用户信息更新"
+ */
+class UsrUpdate extends JFrame{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public UsrUpdate(){
+		
+		this.setTitle("用户信息更新");
+		int height=540, width=1000;
+		int widthh = Toolkit.getDefaultToolkit().getScreenSize().width;
+		int heightt = Toolkit.getDefaultToolkit().getScreenSize().height;
+		this.setLocation(widthh/2-width/2, heightt/2-height/2);
+		this.setSize(width, height);
+		JLabel usrName = new JLabel("输入用户名:");
+		JLabel newUsrName = new JLabel("新用户名 :");
+		JLabel carType = new JLabel("汽车款式:");
+		JLabel document  = new JLabel("附加信息:");
+		
+		JButton button1 = new JButton("  取消  ");
+		JButton button2 = new JButton("  提交  ");
+		
+		JTextField fild1 = new JTextField(30);
+		JTextField fild2 = new JTextField(30);
+		JTextField fild3 = new JTextField(30);
+		JTextArea fild4 = new JTextArea(6, 30);
+		fild4.setLineWrap(true);// 如果内容过长。自动换行
+		Container con = getContentPane();
+		SpringLayout springLayout = new SpringLayout();
+		this.setLayout(springLayout);
+		//添加文本说明   userName
+		springLayout.putConstraint(SpringLayout.NORTH, usrName, 20, SpringLayout.NORTH,con);
+		springLayout.putConstraint(SpringLayout.WEST, usrName,20, SpringLayout.WEST, con);
+		
+		//添加附属的文本框
+		springLayout.putConstraint(SpringLayout.NORTH, fild1,20, SpringLayout.NORTH, con);
+		springLayout.putConstraint(SpringLayout.WEST, fild1,70, SpringLayout.SOUTH, usrName);
+		
+		//添加文本说明  newuUserName
+		springLayout.putConstraint(SpringLayout.NORTH, newUsrName, 40, SpringLayout.NORTH,usrName);
+		springLayout.putConstraint(SpringLayout.WEST, newUsrName,20, SpringLayout.WEST, con);
+		
+		//添加附属的文本框
+		springLayout.putConstraint(SpringLayout.NORTH, fild2,40, SpringLayout.NORTH, usrName);
+		springLayout.putConstraint(SpringLayout.WEST, fild2,70, SpringLayout.SOUTH, usrName);
+		
+		//更改车辆类型
+		//添加文本说明   cartype
+		springLayout.putConstraint(SpringLayout.NORTH, carType, 40, SpringLayout.NORTH,newUsrName);
+		springLayout.putConstraint(SpringLayout.WEST, carType,20, SpringLayout.WEST, con);
+		
+		//添加附属的文本框
+		springLayout.putConstraint(SpringLayout.NORTH, fild3,40, SpringLayout.NORTH, newUsrName);
+		springLayout.putConstraint(SpringLayout.WEST, fild3,70, SpringLayout.SOUTH, usrName);
+		
+		//添加文本说明   cartype
+		springLayout.putConstraint(SpringLayout.NORTH, document, 40, SpringLayout.NORTH,carType);
+		springLayout.putConstraint(SpringLayout.WEST, document,20, SpringLayout.WEST, con);
+		
+		//添加附属的文本框
+		springLayout.putConstraint(SpringLayout.NORTH, fild4,40, SpringLayout.NORTH, carType);
+		springLayout.putConstraint(SpringLayout.WEST, fild4,70, SpringLayout.SOUTH, usrName);
+		
+		//添加 button1   取消按钮
+		springLayout.putConstraint(SpringLayout.NORTH, button1,150, SpringLayout.NORTH, fild4);
+		springLayout.putConstraint(SpringLayout.WEST, button1,20, SpringLayout.WEST, fild4);
+		
+		//添加 button2  提交按钮
+		springLayout.putConstraint(SpringLayout.NORTH, button2,150, SpringLayout.NORTH, fild4);
+		springLayout.putConstraint(SpringLayout.WEST, button2,200, SpringLayout.WEST, fild4);
+		
+		this.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		fild1.addFocusListener(new FocusListener(){
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				//查询数据库中是否有该用户
+				StaticUSr usr = com.qc.dao.toDBa.ConnectToDBa.getStaitcPointUsr(fild1.getText());
+				if(usr==null){
+					//方案1
+					new Errorlog();
+				}else{
+					
+				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {	
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		button1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				fild1.setText("");
+				fild2.setText("");
+				fild3.setText("");
+				fild4.setText("");
+			}
+		});
+		
+		button2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String name = fild1.getText();
+				String NewName = fild2.getText();
+				String NewCarType = fild3.getText();
+				String Msg = fild4.getText();
+				
+				ArrayList<String> updateList = new ArrayList<String>(); 
+				updateList.add(NewName);
+				updateList.add(name);
+				updateList.add(NewCarType);
+				updateList.add(Msg);
+				com.qc.dao.toDBa.ConnectToDBa.updateUsrMsg(updateList);
+			}
+		});
+		con.add(usrName); con.add(fild1);
+		con.add(newUsrName);con.add(fild2);
+		con.add(carType);con.add(fild3);
+		con.add(document);con.add(fild4);
+		con.add(button1);con.add(button2);
+		this.setVisible(true);
+	}
+	
+	
 }
 class ReFlush extends JFrame{
 	/**
-	 * 
+	 * this class is used to update user number
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -116,7 +325,8 @@ class ReFlush extends JFrame{
 		springLayout.putConstraint(SpringLayout.WEST,pic,0,SpringLayout.WEST,con);
 		springLayout.putConstraint(SpringLayout.EAST,pic,0,SpringLayout.EAST,con);
 		springLayout.putConstraint(SpringLayout.SOUTH, pic, 10, SpringLayout.SOUTH, con);
-		con.add(name);	con.add(fild1);
+		
+		con.add(name);	con.add(fild1);		
 		con.add(cust); con.add(fild2);
 		con.add(casel);con.add(ok);
 		con.add(button); con.add(pic);
@@ -140,7 +350,6 @@ class ReFlush extends JFrame{
 				try{
 				int x = Integer.parseInt(s2);
 				}catch(Exception ee){
-					
 					new Errorlog();
 				}
 				

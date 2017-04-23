@@ -72,7 +72,7 @@ public class AddStaticUer extends JDialog{
 				String name = jt1.getText();
 				int id =Integer.decode(jt2.getText());
 				String car_type = jt3.getText();
-				float basefee =Integer.decode(jt4.getText());
+				int basefee =Integer.decode(jt4.getText());
 				
 				StaticUSr  statusr = new StaticUSr();
 				statusr.setBase_Fee(basefee);

@@ -1,15 +1,35 @@
 package com.qc.dao.model;
 
+import java.sql.Time;
+import java.sql.Date;
 
-public class StaticUSr {
+
+public class StaticUSr extends Usr {
 	public StaticUSr(){}
 	private String name;
 	private int ID;
-	private float fee;
+	private int fee;
 	private String Car_type;
-	private int LogIn_date;
-	private float Base_Fee;
-	private float balance;
+	private Date LogIn_date;
+	private int  Base_Fee;
+	private int  balance;
+	private int status;
+	//parking time
+	private Time time;
+	public String document;
+	public void setTime(Time time){
+		this.time = time;
+	}
+	public Time getTime(){
+		return this.time;
+	}
+	public int getStatus()
+	{
+		return this.status;
+	}
+	public void setStatus(int status){
+		this.status = status;
+	}
 	public String getName() {
 		return name;
 	}
@@ -22,10 +42,10 @@ public class StaticUSr {
 	public void setID(int iD) {
 		ID = iD;
 	}
-	public float getFee() {
+	public int getFee() {
 		return fee;
 	}
-	public void setFee(float fee) {
+	public void setFee(int  fee) {
 		this.fee = fee;
 	}
 	public String getCar_type() {
@@ -34,22 +54,22 @@ public class StaticUSr {
 	public void setCar_type(String car_type) {
 		Car_type = car_type;
 	}
-	public int getLogIn_date() {
+	public Date getLogIn_date() {
 		return LogIn_date;
 	}
-	public void setLogIn_date(int logIn_date) {
+	public void setLogIn_date(Date logIn_date) {
 		LogIn_date = logIn_date;
 	}
-	public float getBase_Fee() {
+	public int  getBase_Fee() {
 		return Base_Fee;
 	}
-	public void setBase_Fee(float base_Fee) {
+	public void setBase_Fee(int  base_Fee) {
 		Base_Fee = base_Fee;
 	}
-	public float getBalance() {
+	public int getBalance() {
 		return balance;
 	}
-	public void setBalance(float balance) {
+	public void setBalance(int balance) {
 		this.balance = balance;
 	}
 }

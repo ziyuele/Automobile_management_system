@@ -1,12 +1,21 @@
 package com.qc.dao.model;
 
 
-public class DynamicUsr {
+public class DynamicUsr extends Usr{
 	public DynamicUsr(){}
 	private int ID;
-	private float fee;
+	private int fee;
 	private String Car_type;
-	private float Base_Fee;
+	private int Base_Fee;
+	private int status;
+	
+	public void setStatus(int status){
+		this.status = status;
+	}
+	public int getstatus(){
+		return this.status;
+	}
+	
 	public int getID() {
 		return ID;
 	}
@@ -16,7 +25,7 @@ public class DynamicUsr {
 	public float getFee() {
 		return fee;
 	}
-	public void setFee(float fee) {
+	public void setFee(int fee) {
 		this.fee = fee;
 	}
 	public String getCar_type() {
@@ -25,10 +34,10 @@ public class DynamicUsr {
 	public void setCar_type(String car_type) {
 		Car_type = car_type;
 	}
-	public float getBase_Fee() {
+	public int getBase_Fee() {
 		return Base_Fee;
 	}
-	public void setBase_Fee(float base_Fee) {
+	public void setBase_Fee(int base_Fee) {
 		Base_Fee = base_Fee;
 	}
 }

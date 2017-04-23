@@ -5,9 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.qc.calcuFee.CalcuFee;
 import com.qc.dao.model.DynamicUsr;
 import com.qc.dao.model.StaticUSr;
 
@@ -30,6 +32,46 @@ public class ConnectToDBa {
 	}
 
 	public ConnectToDBa(){}
+	public static void upDateStaticUsrfee(int balance,int id){
+		try {
+			/**
+			 * 费用  时间更新，用户状态更新
+			 */
+			pst=conn.prepareStatement("select now()");
+			ret = pst.executeQuery();
+			pst=conn.prepareStatement("select now()");
+			ret = pst.executeQuery();
+			pst=conn.prepareStatement("select now()");
+			ret = pst.executeQuery();
+			pst=conn.prepareStatement("select now()");
+			ret = pst.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public static Object  getCurrentTime(boolean b){
+		Time time = null;
+		Date date = null;
+		try {
+			pst=conn.prepareStatement("select now()");
+			 ret = pst.executeQuery();
+			 while(ret.next()){
+				 time = ret.getTime(1);
+				 date = ret.getDate(1);
+			 }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(b){
+			return time;
+		}else{
+			return date;
+		}
+	}
 	public static String getAdministrators(){
 		String s = "";
 		try {
@@ -49,6 +91,54 @@ public class ConnectToDBa {
 			return s;
 		}
 	}
+	public static void  usrCheckDyamic(int id){
+		DynamicUsr user = new DynamicUsr();
+		//int len  = lst.size();
+		try {
+			pst=conn.prepareStatement("select * from dynamicusr where ID="+id);
+			 ret = pst.executeQuery();
+			 while(ret.next()){
+				user.setBase_Fee(ret.getInt(1));
+				user.setCar_type(ret.getString(2));
+				user.setFee(ret.getInt(3));
+				user.setID(ret.getInt(4));
+				user.setStatus(ret.getInt(5));
+		}
+		}catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		CalcuFee.getPointDynamicFee(user);
+}
+	
+	
+	public static void usrCheckStatic(int id ){
+		StaticUSr user = new StaticUSr();
+		try {
+			pst=conn.prepareStatement("select * from staticuser where ID="+id);
+			 ret = pst.executeQuery();
+			 while(ret.next()){
+					
+					user.setStatus(ret.getInt(1));
+					user.setTime(ret.getTime(2));
+					user.setBalance(ret.getInt(3));
+					user.setBase_Fee(ret.getInt(4));
+					user.setLogIn_date(ret.getDate(5));
+					user.setCar_type(ret.getString(6));
+					user.setFee(ret.getInt(7));
+					user.setID(ret.getInt(8));			
+					user.setName(ret.getString(9));
+
+				 }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		CalcuFee.getPointStaticFee(user);
+	}
+	
+	
+	
 	public static String getpassword(){
 		String s = "";
 		try {
@@ -57,8 +147,6 @@ public class ConnectToDBa {
 			 while(ret.next()){
 				 s = ret.getString(1);
 			 }
-			 pst = null;
-			 conn = null;
 			 ret = null;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -72,21 +160,48 @@ public class ConnectToDBa {
 			return s;
 		}
 	}
+	
+	/**
+	 * 	
+	 * @param name   the name from Frame "用户信息更新"
+	 * @return  原始的用户信息(通过制定名字的方式查询用户信息)
+	 */
+	public static StaticUSr getStaitcPointUsr(String name){
+		ArrayList<StaticUSr> list = getStaticStatus();
+		for(int a = 0;a < list.size();a++){
+			if(list.get(a).getName().equals(name) && name!= ""){
+				return list.get(a);
+			}
+		}
+		return null;
+	}
+	public  static  void cleanStatus(){
+		pst = null;
+		 conn = null;
+		 ret = null;
+	}
+	/**
+	 * 
+	 * @return   all static users from dba
+	 */
 	public static ArrayList<StaticUSr> getStaticStatus(){
 		ArrayList<StaticUSr> lst = new ArrayList<StaticUSr>();
 		//int len  = lst.size();
 		try {
+			
 			pst=conn.prepareStatement("select * from StaticUser");
 			 ret = pst.executeQuery();
 			 while(ret.next()){
 				StaticUSr user = new StaticUSr();
-				user.setBalance(ret.getFloat(1));
-				user.setBase_Fee(ret.getFloat(2));
-				user.setLogIn_date(ret.getInt(3));
-				user.setCar_type(ret.getString(4));
-				user.setFee(ret.getFloat(5));
-				user.setID(ret.getInt(6));			
-				user.setName(ret.getString(7));
+				user.setStatus(ret.getInt(1));
+				user.setTime(ret.getTime(2));
+				user.setBalance(ret.getInt(3));
+				user.setBase_Fee(ret.getInt(4));
+				user.setLogIn_date(ret.getDate(5));
+				user.setCar_type(ret.getString(6));
+				user.setFee(ret.getInt(7));
+				user.setID(ret.getInt(8));			
+				user.setName(ret.getString(9));
 				
 				lst.add(user);
 				user=null;
@@ -97,23 +212,27 @@ public class ConnectToDBa {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		//cleanStatus();
 		return lst;
 	}
 	
+	/**
+	 * 
+	 * @return  return all dynamic users from the dba 
+	 */
 	public static ArrayList<DynamicUsr> getDynamicStatus(){
 		ArrayList<DynamicUsr> lst = new ArrayList<DynamicUsr>();
 		//int len  = lst.size();
 		try {
-			pst=conn.prepareStatement("select * from DynamicUsr");
+			pst=conn.prepareStatement("select * from dynamicusr");
 			 ret = pst.executeQuery();
 			 while(ret.next()){
 				DynamicUsr user = new DynamicUsr();
-				user.setBase_Fee(ret.getFloat(1));
+				user.setBase_Fee(ret.getInt(1));
 				user.setCar_type(ret.getString(2));
-				user.setFee(ret.getFloat(3));
+				user.setFee(ret.getInt(3));
 				user.setID(ret.getInt(4));
-				
+				user.setStatus(ret.getInt(5));
 				lst.add(user);
 				user=null;
 				
@@ -156,6 +275,11 @@ public class ConnectToDBa {
 		
 	}
 	
+	
+	/**
+	 * 
+	 * @param dynamic  add Dynamic Usr to the dba
+	 */
 	public static void AddDynamicUser(DynamicUsr dynamic){
 		float Base_Fee = dynamic.getBase_Fee();
 		String car_type = dynamic.getCar_type();
@@ -174,6 +298,33 @@ public class ConnectToDBa {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 
+	 * @param list  用户在更新信息的时候更新信息的容器  、
+	 * 0：新用户名
+	 * 1：新的汽车类型
+	 * 2：汽车的说明
+	 */
+	public static void updateUsrMsg(ArrayList<String> list){
+		
+		String NewName = list.get(0);
+		String name = list.get(1);
+		String carType = list.get(2);
+		//数据库目前还没有建立这个模型，留着暂时先不使用
+		String Msg = list.get(3);
+		
+		StaticUSr usr = getStaitcPointUsr(name);
+		int id  = usr.getID();
+		try{
+			String sql = "UPDATE StaticUser SET Car_type='"+carType+"',name='"+NewName+"' WHERE ID='"+id+"'";
+			pst = conn.prepareStatement(sql);
+			pst.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+	} 
+	
 	public static void close(){
 		try{
 			conn.close();

@@ -56,7 +56,7 @@ public class LogIn extends JFrame{
 				// TODO Auto-generated method stub
 				jte.setText("");
 				pasw.setText("");
-			}
+			}	
 		});
 		
 		
@@ -104,7 +104,7 @@ public class LogIn extends JFrame{
 	private void check(int x){
 		new com.qc.mainFrame.MainFrame().setVisible(true);
 		LogIn.this.setVisible(false);
-
+		
 	}
 	@SuppressWarnings("unused")
 	private void check(){
