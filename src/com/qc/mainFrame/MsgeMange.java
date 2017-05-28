@@ -12,7 +12,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,7 +26,10 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
+import com.qc.dao.model.DynamicUsr;
 import com.qc.dao.model.StaticUSr;
+import com.qc.dao.toDBa.ConnectToDBa;
+import com.qc.hardware.ConnectToHardWare;
 
 public class MsgeMange extends JDialog{
 
@@ -51,9 +55,9 @@ public class MsgeMange extends JDialog{
 		con.add(button1);
 		button2 = new MyButton("用户信息更新");
 		con.add(button2);
-		button3 = new MyButton("显示所有用户信息");
+		button3 = new MyButton("系统状态");
 		con.add(button3);
-		button4 = new MyButton("计费统计");
+		button4 = new MyButton("删除用户");
 		con.add(button4);
 		button5 = new MyButton("信息导出");
 		con.add(button5);
@@ -84,7 +88,25 @@ public class MsgeMange extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				MsgeMange.this.setVisible(false);
-				MainFrame.hsplit.setRightComponent(new RightERA1());
+				MainFrame.hsplit.setRightComponent(new PieChart().getChartPanel());
+			}
+		});
+		button4.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new DelectUser();
+			}
+		});
+		button5.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				button5.setText("正在导出,请稍等！！");
+				ConnectToDBa.getExcel();
+				new mMessage("导出成功，请在桌面查看！");
 			}
 		});
 	}
@@ -214,13 +236,21 @@ class UsrUpdate extends JFrame{
 			@Override
 			public void focusLost(FocusEvent e) {
 				// TODO Auto-generated method stub
+				boolean flag = false;
 				//查询数据库中是否有该用户
-				StaticUSr usr = com.qc.dao.toDBa.ConnectToDBa.getStaitcPointUsr(fild1.getText());
-				if(usr==null){
-					//方案1
-					new Errorlog();
+				if(fild1.getText() == "" || fild1.getText().equals("")){
 				}else{
-					
+					StaticUSr usr = com.qc.dao.toDBa.ConnectToDBa.getStaitcPointUsr(fild1.getText());
+					if(usr==null){
+						//方案1
+						flag = true;
+						DynamicUsr Dusr =  com.qc.dao.toDBa.ConnectToDBa.getDynamicUsr(fild1.getText());
+						if(Dusr == null){
+							new Errorlog();
+						}
+					}else{
+						//com.qc.dao.toDBa.ConnectToDBa.updateUsrMsg()
+					}
 				}
 			}
 			
@@ -248,17 +278,41 @@ class UsrUpdate extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String name = fild1.getText();
-				String NewName = fild2.getText();
-				String NewCarType = fild3.getText();
-				String Msg = fild4.getText();
-				
-				ArrayList<String> updateList = new ArrayList<String>(); 
-				updateList.add(NewName);
-				updateList.add(name);
-				updateList.add(NewCarType);
-				updateList.add(Msg);
-				com.qc.dao.toDBa.ConnectToDBa.updateUsrMsg(updateList);
+				try{
+					String name = fild1.getText();
+					String NewName = fild2.getText();
+					String NewCarType = fild3.getText();
+					String Msg = fild4.getText();
+					
+					Map <String,String> myMap = new HashMap<String, String>();
+					myMap.put("name", name);
+					myMap.put("newNma", NewName);
+					myMap.put("carType", NewCarType);
+					myMap.put("msg", Msg);
+					
+					// TODO Auto-generated method stub
+					boolean flag = false;
+					//查询数据库中是否有该用户
+					if(fild1.getText() == "" || fild1.getText().equals("")){
+					}else{
+						StaticUSr usr = com.qc.dao.toDBa.ConnectToDBa.getStaitcPointUsr(fild1.getText());
+						if(usr==null){
+							//方案1
+							flag = true;
+							DynamicUsr Dusr =  com.qc.dao.toDBa.ConnectToDBa.getDynamicUsr(fild1.getText());
+							if(Dusr == null){
+								new Errorlog();
+							}else{
+								com.qc.dao.toDBa.ConnectToDBa.updateUsrMsg(myMap,flag);
+							}
+						}else{
+							com.qc.dao.toDBa.ConnectToDBa.updateUsrMsg(myMap,flag);
+						}
+					}
+				}catch(Exception e1){
+					e1.printStackTrace();
+					new mMessage("操作有误！");
+				}
 			}
 		});
 		con.add(usrName); con.add(fild1);
@@ -330,6 +384,22 @@ class ReFlush extends JFrame{
 		con.add(cust); con.add(fild2);
 		con.add(casel);con.add(ok);
 		con.add(button); con.add(pic);
+		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				while(ConnectToHardWare.getFlag()==false){
+					ConnectToHardWare.setFlag(true);
+				}
+				String s = ConnectToDBa.getUsr();
+				fild1.setText(s);
+				ConnectToHardWare.setUiD();
+				while(ConnectToHardWare.getFlag()==true){
+					ConnectToHardWare.setFlag(false);
+				}
+			}
+		});
 		
 		casel.addActionListener(new ActionListener() {
 			
@@ -345,10 +415,11 @@ class ReFlush extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String s1 = fild1.getText();
+				String name = fild1.getText();
 				String s2 = fild2.getText();
 				try{
 				int x = Integer.parseInt(s2);
+				ConnectToDBa.updateFee(name, x);
 				}catch(Exception ee){
 					new Errorlog();
 				}
@@ -374,8 +445,6 @@ class Errorlog extends JDialog {
 		this.setSize(width, height);
 		
 		SpringLayout springLayout = new SpringLayout();
-		
-		
 		
 		Container con = getContentPane();
 		con.setLayout(springLayout);
@@ -419,7 +488,7 @@ class MyButton extends JButton{
 	public MyButton(String s){
 		super(s);
 		this.setHorizontalTextPosition(SwingConstants.CENTER); 
-		this.setIcon(new ImageIcon("imge/button.png"));
+		//this.setIcon(new ImageIcon("imge/button.png"));
 	}
 }
 
@@ -431,8 +500,9 @@ class Pic extends JPanel{
 	ImageIcon icon;  
     Image img;  
 	public Pic(){
-		icon = new ImageIcon("imge/MianFrame.png");
+		icon = new ImageIcon("imge/ruku.jpg");
         img=icon.getImage();  
+ 
 	}
 	   public void paintComponent(Graphics g) {  
 	        super.paintComponent(g);  

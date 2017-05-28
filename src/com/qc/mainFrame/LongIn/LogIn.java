@@ -1,6 +1,7 @@
 package com.qc.mainFrame.LongIn;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -34,9 +35,8 @@ public class LogIn extends JFrame{
 		int heightt = Toolkit.getDefaultToolkit().getScreenSize().height;
 		this.setLocation(widthh/2-width/2, heightt/2-height/2);
 		this.setSize(width, height);
-		
+		this.setFont(new Font("幼圆",Font.BOLD,40));
 		this.setResizable(false);
-		this.setTitle("logIn 汽车管理系统");
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		//this.setLayout(new GridLayout(3,1));
 		JPanel jp1 = new JPanel();
@@ -62,9 +62,11 @@ public class LogIn extends JFrame{
 		
 		JLabel jl4 = new JLabel("<html> <a href ='www.baidu.com'>忘记密码</a></html>",
 				JLabel.CENTER);
-		jl4.setFont(new Font("宋体",Font.BOLD,13));		
+		jl4.setFont(new Font("幼圆",Font.BOLD,13));		
 		JCheckBox check1 = new JCheckBox("保存用户名");
+		check1.setFont(new Font("黑体",Font.BOLD,13));
 		JCheckBox check2 = new JCheckBox("记住密码");
+		check2.setFont(new Font("黑体",Font.BOLD,13));
 		JLabel jb = new JLabel("",JLabel.CENTER);
 		
 		
@@ -96,10 +98,10 @@ public class LogIn extends JFrame{
 		
 		jp3.add(jb31);	jp3.add(jb32); jp3.add(jb33);
 		Container con = getContentPane();
-		
 		con.add(jp1,BorderLayout.NORTH);
 		con.add(jp2,BorderLayout.CENTER);
 		con.add(jp3,BorderLayout.SOUTH);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 	private void check(int x){
 		new com.qc.mainFrame.MainFrame().setVisible(true);

@@ -10,12 +10,10 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -76,7 +74,7 @@ public class MainFrame extends JFrame {
 @SuppressWarnings("serial")
 class LeftERA extends JPanel{
 	ImageIcon icon = new ImageIcon("imge/Icon.png");
-	private Button1 button1 = new Button1("系统状态");
+	private Button1 button1 = new Button1("用户信息");
 	private Button1 button2 = new Button1("添加用户");
 	private Button1 button3 = new Button1("信息管理");
 	private Button1 button4 = new Button1("设置");
@@ -89,7 +87,8 @@ class LeftERA extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//System.out.println("test1 success");
-				MainFrame.hsplit.setRightComponent(new PieChart().getChartPanel());
+				MainFrame.hsplit.setRightComponent(new RightERA1());
+				//MainFrame.hsplit.setRightComponent(new PieChart().getChartPanel());
 			}
 		});
 		
@@ -155,7 +154,9 @@ class RightERA1 extends JPanel{
 		super();	
 		this.lst1 = ConnectToDBa.getStaticStatus();
 		this.lst2 = ConnectToDBa.getDynamicStatus();
-		this.setLayout(new GridLayout(5,10,5,10));
+		
+		this.setLayout(new GridLayout(6,3,5,10));
+		System.out.println(lst1.size()+lst2.size());
 		for(int a = 0;a<lst1.size();a++){
 			int balence = lst1.get(a).getBalance();
 			int base_Fee = lst1.get(a).getBase_Fee();
@@ -165,7 +166,8 @@ class RightERA1 extends JPanel{
 			Date  logIn_Date = lst1.get(a).getLogIn_date();
 			String name = lst1.get(a).getName();
 			
-			JLabel jbCar = new JLabel("name:"+name+"\r\n   "+"id:"+id);
+			JLabel jbCar = new JLabel("用户:"+name+"\r\n   "+"用户ID:");
+			jbCar.setIcon(new ImageIcon("imge/caise.jpg"));
 			jbCar.setOpaque(true);
 			jbCar.setBackground(Color.CYAN);
 			jbCar.setFont(new Font("幼圆", Font.PLAIN, 15));
@@ -181,39 +183,67 @@ class RightERA1 extends JPanel{
 			
 			JLabel jbCar = new JLabel("Car_type:"+Car_type+"   "+"id:"+Id);
 			jbCar.setOpaque(true);
-			jbCar.setBackground(Color.GRAY);
-			jbCar.setFont(new Font("宋体", Font.PLAIN, 13));
+			jbCar.setBackground(Color.PINK);
+			jbCar.setIcon(new ImageIcon("imge/caise.jpg"));
+			jbCar.setFont(new Font("幼圆", Font.PLAIN, 15));
 			jbCar.setSize(50, 50);
 			this.add(jbCar);
 		}
-		for(int c = 0;c<(100-(lst1.size()+lst2.size()));c++){
-			JLabel jbCar = new JLabel("null");
+		
+		for(
+			int c = 0;c<(18-(lst1.size()+lst2.size()));c++){
+			JLabel jbCar = new JLabel("可用车位");
 			jbCar.setOpaque(true);
-			jbCar.setIcon(new ImageIcon("imge/icon1.png"));
-			jbCar.setBackground(Color.PINK);
-			jbCar.setFont(new Font("宋体", Font.PLAIN, 13));
+			jbCar.setIcon(new ImageIcon("imge/heibai.jpg"));
+			jbCar.setBackground(Color.GRAY);
+			jbCar.setFont(new Font("幼圆", Font.PLAIN, 15));
 			jbCar.setSize(50, 50);
 			this.add(jbCar);
 		}
 	}
 }
 
-class RightERA2 extends JPanel{
+class RightERA2 extends JPanel implements Runnable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3539029942436923128L;
 	ImageIcon icon;  
-    Image img;  
+    Image img; 
+    String ttime="";
+    JLabel lab = new JLabel();
+    JLabel lab1 = new JLabel("欢迎使用汽车管理系统",JLabel.LEADING);
+    JLabel lab2 = new JLabel("系统运行中");
 	public RightERA2(){
-		icon = new ImageIcon("imge/MianFrame.png");
-        img=icon.getImage();  
+		icon = new ImageIcon("imge/timg.gif");
+        img=icon.getImage();
+        FlowLayout out = new FlowLayout();
+        this.setLayout(out);
+       	this.add(lab);
+       	lab1.setFont(new Font("幼圆" ,Font.BOLD, 40));
+       	lab1.setSize(400,300);
+       	this.add(lab1);
+       	this.setVisible(true);
+        gettime();
 	}
 	   public void paintComponent(Graphics g) {  
 	        super.paintComponent(g);  
 	        //下面这行是为了背景图片可以跟随窗口自行调整大小，可以自己设置成固定大小  
 	        g.drawImage(img, 0, 0,this.getWidth(), this.getHeight(), this);  
-	   }  
+	   }
+	  public void gettime(){
+		  new Thread(this).start();
+	  }
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(true){
+			Date d = new Date();
+			ttime = d.toString();
+			lab.setText(ttime);
+			lab.setFont(new Font("幼圆", Font.BOLD, 40));
+		}
+	}
 }
 
 

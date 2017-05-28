@@ -8,7 +8,13 @@ public class DynamicUsr extends Usr{
 	private String Car_type;
 	private int Base_Fee;
 	private int status;
-	
+	private String name;
+	public void setName(String name){
+		this.name=name;
+	}
+	public String getName(){
+		return this.name;
+	}
 	public void setStatus(int status){
 		this.status = status;
 	}

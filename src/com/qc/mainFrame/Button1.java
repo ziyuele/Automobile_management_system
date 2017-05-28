@@ -12,11 +12,9 @@ public class Button1 extends JButton{
 	 ImageIcon icon = new ImageIcon("imge/button.png");
 	public Button1(String s){
 		super(s);
-		this.setContentAreaFilled(false);
-		this.setHorizontalTextPosition(SwingConstants.CENTER); 
-		this.setSelectedIcon(new ImageIcon("imge/icon1.png"));
-		this.setSize(20, 20);
-		this.setIcon(icon);
+		//this.setHorizontalTextPosition(SwingConstants.CENTER); 
+		//this.setSize(20, 20);
+		//this.setIcon(icon);
 		
 	}
 	public Button1(){
